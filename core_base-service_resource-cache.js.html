@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: services/dynamic/json-path.js</title>
+    <title>JSDoc: Source: core/base-service/resource-cache.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: services/dynamic/json-path.js</h1>
+    <h1 class="page-title">Source: core/base-service/resource-cache.js</h1>
 
     
 
@@ -30,80 +30,69 @@
  * @module
  */
 
-import Joi from 'joi'
-import jp from 'jsonpath'
-import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
-import { InvalidParameter, InvalidResponse } from '../index.js'
+import { InvalidResponse } from './errors.js'
+import { fetch } from './got.js'
+import checkErrorResponse from './check-error-response.js'
+
+const oneDay = 24 * 3600 * 1000 // 1 day in milliseconds
+
+// Map from URL to { timestamp: last fetch time, data: data }.
+let resourceCache = Object.create(null)
 
 /**
- * Dynamic service class factory which wraps {@link module:core/base-service/base~BaseService} with support of {@link https://jsonpath.com/|JSONPath}.
+ * Make a HTTP request using an in-memory cache
  *
- * @param {Function} superclass class to extend
- * @returns {Function} wrapped class
+ * @param {object} attrs Refer to individual attrs
+ * @param {string} attrs.url URL to request
+ * @param {number} attrs.ttl Number of milliseconds to keep cached value for
+ * @param {boolean} [attrs.json=true] True if we expect to parse the response as JSON
+ * @param {Function} [attrs.scraper=buffer => buffer] Function to extract value from the response
+ * @param {object} [attrs.options={}] Options to pass to got
+ * @param {Function} [attrs.requestFetcher=fetch] Custom fetch function
+ * @returns {*} Parsed response
  */
-export default superclass =>
-  class extends superclass {
-    static category = 'dynamic'
-    static defaultBadgeData = { label: 'custom badge' }
-
-    /**
-     * Request data from an upstream API, transform it to JSON and validate against a schema
-     *
-     * @param {object} attrs Refer to individual attrs
-     * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
-     * @param {string} attrs.url URL to request
-     * @param {object} [attrs.errorMessages={}] Key-value map of status codes
-     *    and custom error messages e.g: `{ 404: 'package not found' }`.
-     *    This can be used to extend or override the
-     *    [default](https://github.com/badges/shields/blob/master/services/dynamic-common.js#L8)
-     * @returns {object} Parsed response
-     */
-    async fetch({ schema, url, errorMessages }) {
-      throw new Error(
-        `fetch() function not implemented for ${this.constructor.name}`
-      )
-    }
-
-    async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
-      const data = await this.fetch({
-        schema: Joi.any(),
-        url,
-        errorMessages,
-      })
-
-      // JSONPath only works on objects and arrays.
-      // https://github.com/badges/shields/issues/4018
-      if (typeof data !== 'object') {
-        throw new InvalidResponse({
-          prettyMessage: 'resource must contain an object or array',
-        })
-      }
-
-      let values
-      try {
-        values = jp.query(data, pathExpression)
-      } catch (e) {
-        const { message } = e
-        if (
-          message.startsWith('Lexical error') ||
-          message.startsWith('Parse error') ||
-          message.includes('Unexpected token')
-        ) {
-          throw new InvalidParameter({
-            prettyMessage: 'unparseable jsonpath query',
-          })
-        } else {
-          throw e
-        }
-      }
-
-      if (!values.length) {
-        throw new InvalidResponse({ prettyMessage: 'no result' })
-      }
-
-      return renderDynamicBadge({ value: values, prefix, suffix })
-    }
+async function getCachedResource({
+  url,
+  ttl = oneDay,
+  json = true,
+  scraper = buffer => buffer,
+  options = {},
+  requestFetcher = fetch,
+}) {
+  const timestamp = Date.now()
+  const cached = resourceCache[url]
+  if (cached != null &amp;&amp; timestamp - cached.timestamp &lt; ttl) {
+    return cached.data
   }
+
+  const { buffer } = await checkErrorResponse({})(
+    await requestFetcher(url, options)
+  )
+
+  let reqData
+  if (json) {
+    try {
+      reqData = JSON.parse(buffer)
+    } catch (e) {
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable intermediate json response',
+        underlyingError: e,
+      })
+    }
+  } else {
+    reqData = buffer
+  }
+
+  const data = scraper(reqData)
+  resourceCache[url] = { timestamp, data }
+  return data
+}
+
+function clearResourceCache() {
+  resourceCache = Object.create(null)
+}
+
+export { getCachedResource, clearResourceCache }
 </code></pre>
         </article>
     </section>

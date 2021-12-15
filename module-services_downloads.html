@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/token-pooling/token-pool</title>
+    <title>JSDoc: Module: services/downloads</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/token-pooling/token-pool</h1>
+    <h1 class="page-title">Module: services/downloads</h1>
 
     
 
@@ -46,16 +46,6 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_token-pooling_token-pool-Token.html">Token</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></dt>
-            <dd></dd>
-        </dl>
-    
 
     
 
@@ -74,7 +64,7 @@
     
 
     
-    <h4 class="name" id="~sanitizeToken"><span class="type-signature">(inner) </span>sanitizeToken<span class="signature">(id)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~renderDownloadsBadge"><span class="type-signature">(inner) </span>renderDownloadsBadge<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -82,7 +72,8 @@
 
 
 <div class="description">
-    <p>Compute a one-way hash of the input string.</p>
+    <p>Handles rendering concerns of badges that display
+download counts, with override/customization support</p>
 </div>
 
 
@@ -118,7 +109,82 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attrs</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>downloads</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of downloads</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interval</code></td>
             
 
             <td class="type">
@@ -131,10 +197,199 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>token</p></td>
+            <td class="description last"><p>Period or interval the downloads occurred
+(e.g. day, week, month). If provided then this Will be reflected
+in the badge message unless overridden by other message-related parameters</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Version or tag that was downloaded
+which will be reflected in the badge label (unless the label is overridden)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>labelOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge label is set to this
+value overriding any other label-related parameters</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colorOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge color is set to this
+value instead of the color being based on the count of downloads</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>messageSuffixOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge message will
+will have this value added to the download count, separated with a space</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>versionedLabelPrefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge label will use
+this value as the prefix for versioned badges, e.g. <code>foobar@v1.23</code>. Defaults to 'downloads'</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -175,7 +430,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line14">line 14</a>
+        <a href="services_downloads.js.html">services/downloads.js</a>, <a href="services_downloads.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -204,7 +459,7 @@
 
         
 <div class="param-desc">
-    <p>hash</p>
+    <p>Badge</p>
 </div>
 
 
@@ -215,7 +470,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
     </dd>

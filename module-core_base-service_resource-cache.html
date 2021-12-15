@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/token-pooling/token-pool</title>
+    <title>JSDoc: Module: core/base-service/resource-cache</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/token-pooling/token-pool</h1>
+    <h1 class="page-title">Module: core/base-service/resource-cache</h1>
 
     
 
@@ -46,16 +46,6 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_token-pooling_token-pool-Token.html">Token</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></dt>
-            <dd></dd>
-        </dl>
-    
 
     
 
@@ -74,7 +64,7 @@
     
 
     
-    <h4 class="name" id="~sanitizeToken"><span class="type-signature">(inner) </span>sanitizeToken<span class="signature">(id)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~getCachedResource"><span class="type-signature">(async, inner) </span>getCachedResource<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {*}</span></h4>
     
 
     
@@ -82,7 +72,7 @@
 
 
 <div class="description">
-    <p>Compute a one-way hash of the input string.</p>
+    <p>Make a HTTP request using an in-memory cache</p>
 </div>
 
 
@@ -118,7 +108,53 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attrs</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
@@ -131,10 +167,220 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>token</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>URL to request</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ttl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Number of milliseconds to keep cached value for</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last"><p>True if we expect to parse the response as JSON</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scraper</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    buffer => buffer
+                
+                </td>
+            
+
+            <td class="description last"><p>Function to extract value from the response</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>Options to pass to got</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>requestFetcher</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    fetch
+                
+                </td>
+            
+
+            <td class="description last"><p>Custom fetch function</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -175,7 +421,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line14">line 14</a>
+        <a href="core_base-service_resource-cache.js.html">core/base-service/resource-cache.js</a>, <a href="core_base-service_resource-cache.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -204,7 +450,7 @@
 
         
 <div class="param-desc">
-    <p>hash</p>
+    <p>Parsed response</p>
 </div>
 
 
@@ -215,7 +461,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">*</span>
 
 
     </dd>
